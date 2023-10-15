@@ -1,13 +1,12 @@
 const pokemonName = document.querySelector(".pokemon-name");
 const pokemonNumber = document.querySelector(".pokemon-number");
 const pokemonImage = document.querySelector(".pokemon-image");
-const pokemonImageShiny = document.querySelector(".pokemon-shiny");
 
 const form = document.querySelector(".form");
 const input = document.querySelector(".input-search");
 const buttonPrev = document.querySelector(".btn-prev");
 const buttonNext = document.querySelector(".btn-next");
-const buttonShiny = document.querySelector(".btn-shiny");
+const shiny = document.querySelector(".btn-shiny");
 
 let searchPokemon = 1;
 
@@ -44,9 +43,14 @@ const renderPokemon = async (pokemon) => {
 };
 
 const renderPokemonShiny = async (pokemon) => {
-  const data = await fetchPokemon(pokemon);
-
-  pokemonImageShiny.src = data["sprites"]["versions"]["generation-v"]["black-white"]["animated"]["front_shiny"];
+  const data = await fetchPokemon(pokemon)
+    if(shiny.classList.value == 'btn-shiny selecionado'){
+        shiny.classList.remove('selecionado')
+        pokemonImage.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default']
+    } else if (shiny.classList.value !== 'btn-shiny selecionado') {
+        shiny.classList.add('selecionado')
+        pokemonImage.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_shiny']
+    }
 };
 
 form.addEventListener("submit", (event) => {
@@ -57,16 +61,18 @@ form.addEventListener("submit", (event) => {
 buttonPrev.addEventListener("click", () => {
   if (searchPokemon > 1) {
     searchPokemon -= 1;
+    shiny.classList.remove('selecionado')
     renderPokemon(searchPokemon);
   }
 });
 
 buttonNext.addEventListener("click", () => {
   searchPokemon += 1;
+  shiny.classList.remove('selecionado')
   renderPokemon(searchPokemon);
 });
 
-buttonShiny.addEventListener("click", () => {
+shiny.addEventListener("click", () => {
   renderPokemonShiny(searchPokemon);
 });
 
